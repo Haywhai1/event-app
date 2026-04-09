@@ -1,31 +1,89 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ProfilePage() {
   const { data: session } = useSession();
 
   const [form, setForm] = useState({
-    name: session?.user?.name || "",
-    email: session?.user?.email || "",
+    name: "",
     password: "",
     gender: "",
     bio: "",
     location: "",
   });
 
+  const [loadingData, setLoadingData] = useState(true);
   const [editing, setEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
+  // ✅ FETCH USER DATA
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("/api/user/me");
+        const data = await res.json();
+
+        setForm({
+          name: data.name || "",
+          password: "",
+          gender: data.gender || "",
+          bio: data.bio || "",
+          location: data.location || "",
+        });
+      } catch {
+        setError("Failed to load profile");
+      } finally {
+        setLoadingData(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  // ✅ SAVE
   const handleSave = async () => {
-    await fetch("/api/user/update", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    setLoading(true);
+    setMessage("");
+    setError("");
 
-    setEditing(false);
+    try {
+      const res = await fetch("/api/user/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Something went wrong");
+        setLoading(false);
+        return;
+      }
+
+      setMessage("Profile updated successfully 🎉");
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch {
+      setError("Network error");
+      setLoading(false);
+    }
   };
+
+  // ✅ LOADING SCREEN
+  if (loadingData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-white">
+        Loading profile...
+      </div>
+    );
+  }
 
   const avatar =
     form.gender === "male"
@@ -41,8 +99,6 @@ export default function ProfilePage() {
         {/* PROFILE CARD */}
         <div className="p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10">
           <div className="flex items-center gap-4">
-
-            {/* AVATAR */}
             <div
               className={`w-16 h-16 rounded-full bg-gradient-to-br ${avatar} flex items-center justify-center text-white text-xl font-bold`}
             >
@@ -51,10 +107,10 @@ export default function ProfilePage() {
 
             <div>
               <h2 className="text-white text-xl font-semibold">
-                {form.name || "Your Name"}
+                {form.name}
               </h2>
               <p className="text-gray-400 text-sm">
-                {form.email}
+                {session?.user?.email}
               </p>
               <p className="text-gray-500 text-xs mt-1">
                 Joined recently
@@ -130,20 +186,6 @@ export default function ProfilePage() {
             )}
           </Field>
 
-          <Field label="Email">
-            {editing ? (
-              <input
-                value={form.email}
-                onChange={(e) =>
-                  setForm({ ...form, email: e.target.value })
-                }
-                className="input text-black"
-              />
-            ) : (
-              <span>{form.email}</span>
-            )}
-          </Field>
-
           {editing && (
             <Field label="New Password">
               <input
@@ -157,15 +199,27 @@ export default function ProfilePage() {
             </Field>
           )}
 
+          {/* ✅ ERROR */}
+          {error && (
+            <p className="text-sm text-red-400">{error}</p>
+          )}
+
+          {/* ✅ SUCCESS */}
+          {message && (
+            <p className="text-sm text-green-400">{message}</p>
+          )}
+
           <div className="flex gap-3 pt-4">
             {editing ? (
               <>
                 <button
                   onClick={handleSave}
+                  disabled={loading}
                   className="flex-1 bg-white text-black py-2 rounded-xl"
                 >
-                  Save Changes
+                  {loading ? "Saving..." : "Save Changes"}
                 </button>
+
                 <button
                   onClick={() => setEditing(false)}
                   className="flex-1 bg-white/10 text-white py-2 rounded-xl"
@@ -188,7 +242,7 @@ export default function ProfilePage() {
   );
 }
 
-/* FIELD COMPONENT */
+/* FIELD */
 function Field({
   label,
   children,

@@ -13,21 +13,50 @@ import {
   UserPlus,
 } from "lucide-react";
 
+/* ✅ TYPE */
+type UserType = {
+  name: string;
+  email: string;
+  gender?: "male" | "female" | "";
+};
+
 export default function ProfileMenu() {
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const name = session?.user?.name || "";
+  const [user, setUser] = useState<UserType | null>(null);
+
+  /* ✅ FETCH USER */
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!session) return;
+
+      try {
+        const res = await fetch("/api/user/me");
+        const data: UserType = await res.json();
+        setUser(data);
+      } catch {
+        console.log("Failed to load user");
+      }
+    };
+
+    fetchUser();
+  }, [session]);
+
+  /* ✅ NAME + INITIALS */
+  const name = user?.name || session?.user?.name || "";
+
   const initials = name
     ? name
         .split(" ")
-        .map((n) => n[0])
+        .map((n: string) => n[0])
         .join("")
         .toUpperCase()
     : "P";
 
+  /* ✅ NAVIGATION */
   const navigate = (path: string) => {
     setOpen(false);
     router.push(path);
@@ -38,7 +67,7 @@ export default function ProfileMenu() {
     signOut();
   };
 
-  // ✅ CLICK OUTSIDE TO CLOSE
+  /* ✅ CLICK OUTSIDE */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -55,6 +84,14 @@ export default function ProfileMenu() {
     };
   }, [open]);
 
+  /* ✅ AVATAR */
+  const avatar =
+    user?.gender === "male"
+      ? "from-blue-500 to-cyan-400"
+      : user?.gender === "female"
+      ? "from-pink-500 to-purple-500"
+      : "from-gray-500 to-gray-700";
+
   return (
     <div className="relative" ref={menuRef}>
       {/* PROFILE ICON */}
@@ -63,7 +100,9 @@ export default function ProfileMenu() {
         className="w-14 h-14 rounded-full flex items-center justify-center border border-white/10 overflow-hidden"
       >
         {session ? (
-          <div className="w-full h-full bg-white/10 flex items-center justify-center">
+          <div
+            className={`w-full h-full bg-gradient-to-br ${avatar} flex items-center justify-center`}
+          >
             <span className="text-white text-lg font-semibold">
               {initials}
             </span>
@@ -90,9 +129,21 @@ export default function ProfileMenu() {
           >
             {session ? (
               <>
-                <MenuItem icon={<User size={16} />} label="Profile" onClick={() => navigate("/profile")} />
-                <MenuItem icon={<Calendar size={16} />} label="My Events" onClick={() => navigate("/my-events")} />
-                <MenuItem icon={<Settings size={16} />} label="Settings" onClick={() => navigate("/settings")} />
+                <MenuItem
+                  icon={<User size={16} />}
+                  label="Profile"
+                  onClick={() => navigate("/profile")}
+                />
+                <MenuItem
+                  icon={<Calendar size={16} />}
+                  label="My Events"
+                  onClick={() => navigate("/my-events")}
+                />
+                <MenuItem
+                  icon={<Settings size={16} />}
+                  label="Settings"
+                  onClick={() => navigate("/settings")}
+                />
 
                 <Divider />
 
@@ -105,13 +156,29 @@ export default function ProfileMenu() {
               </>
             ) : (
               <>
-                <MenuItem icon={<Calendar size={16} />} label="My Events" onClick={() => navigate("/my-events")} />
-                <MenuItem icon={<Settings size={16} />} label="Settings" onClick={() => navigate("/settings")} />
+                <MenuItem
+                  icon={<Calendar size={16} />}
+                  label="My Events"
+                  onClick={() => navigate("/my-events")}
+                />
+                <MenuItem
+                  icon={<Settings size={16} />}
+                  label="Settings"
+                  onClick={() => navigate("/settings")}
+                />
 
                 <Divider />
 
-                <MenuItem icon={<UserPlus size={16} />} label="Register" onClick={() => navigate("/signup")} />
-                <MenuItem icon={<LogIn size={16} />} label="Sign In" onClick={() => navigate("/signin")} />
+                <MenuItem
+                  icon={<UserPlus size={16} />}
+                  label="Register"
+                  onClick={() => navigate("/signup")}
+                />
+                <MenuItem
+                  icon={<LogIn size={16} />}
+                  label="Sign In"
+                  onClick={() => navigate("/signin")}
+                />
               </>
             )}
           </motion.div>
@@ -121,6 +188,7 @@ export default function ProfileMenu() {
   );
 }
 
+/* ✅ MENU ITEM */
 function MenuItem({
   icon,
   label,
@@ -145,6 +213,7 @@ function MenuItem({
   );
 }
 
+/* ✅ DIVIDER */
 function Divider() {
   return <div className="h-px bg-white/10 my-2 opacity-50" />;
 }
