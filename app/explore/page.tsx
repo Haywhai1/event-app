@@ -4,13 +4,17 @@ import EventCard from "@/components/EventCard";
 import GradientBanner from "@/components/GradientBanner";
 import CategoryCard from "@/components/CategoryCard";
 import BottomNav from "@/components/BottomNav";
+import ProfileMenu from "@/components/ProfileMenu";
 
 export default function ExplorePage() {
   return (
     <div className="min-h-screen pb-20 px-4">
       {/* Header */}
       <header className="mt-6 mb-4">
-        <h2 className="text-grayText text-sm">Hello Username</h2>
+        <div className="flex justify-between items-center">
+          <h2 className="text-grayText text-sm">Hello Username</h2>
+          <ProfileMenu />
+        </div>
         <h1 className="text-2xl font-semibold mt-1">Explore Amazing Events</h1>
       </header>
 
