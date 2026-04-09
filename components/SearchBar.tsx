@@ -6,12 +6,8 @@ export default function SearchBar() {
       <input
         type="text"
         placeholder="Search events..."
-        className="bg-transparent outline-none text-sm w-full placeholder-grayText"
+        className="bg-transparent outline-none text-base w-full placeholder-grayText"
       />
-
-      {/* <button className="text-white bg-white/10 px-3 py-1.5 rounded-xl text-sm">
-        ⚙️
-      </button> */}
     </div>
   );
 }
