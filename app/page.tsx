@@ -13,8 +13,16 @@ export default function ExplorePage() {
 
   const name = session?.user?.name;
   return (
-    <div className="min-h-screen pb-20 px-4">
-      {/* Header */}
+    <div className="relative min-h-screen pb-20 px-4 
+bg-gradient-to-b from-[#0f172a] via-[#020617] to-black">
+
+  {/* Glow overlay */}
+  <div className="absolute top-0 left-0 w-full h-64 
+  bg-gradient-to-r from-purple-500/20 via-blue-500/20 to-transparent blur-3xl pointer-events-none" />
+
+  {/* Content */}
+  <div className="relative z-10">
+    {/* Header */}
       <header className="mt-6 mb-4">
         <div className="flex justify-between items-center">
           <h2 className="text-white text-sm">
@@ -84,6 +92,81 @@ export default function ExplorePage() {
 
       {/* Bottom Navigation */}
       <BottomNav />
-    </div>
+  </div>
+</div>
+
+
+    // <div className="min-h-screen pb-20 px-4">
+    //   {/* Header */}
+    //   <header className="mt-6 mb-4">
+    //     <div className="flex justify-between items-center">
+    //       <h2 className="text-white text-sm">
+    //         {status === "loading"
+    //           ? "Loading..."
+    //           : session
+    //             ? `Hello ${name}`
+    //             : "Hello Guest"}
+    //       </h2>
+
+    //       <ProfileMenu />
+    //     </div>
+
+    //     <h1 className="text-2xl font-semibold mt-1">Explore Amazing Events</h1>
+    //   </header>
+
+    //   {/* Search */}
+    //   <SearchBar />
+
+    //   {/* Popular Events */}
+    //   <section className="mt-6">
+    //     <div className="flex justify-between items-center mb-3">
+    //       <h3 className="text-xl font-semibold mb-3">Popular Events 🔥</h3>
+    //       <a className="text-xs text-accentBlue" href="/events">
+    //         View all
+    //       </a>
+    //     </div>
+
+    //     <div>
+    //       {/* Mobile Scroll */}
+    //       <div className="flex gap-4 overflow-x-auto lg:hidden">
+    //         <EventCard />
+    //         <EventCard />
+    //         <EventCard />
+    //       </div>
+
+    //       {/* Desktop Grid */}
+    //       <div className="hidden lg:grid grid-cols-3 gap-6">
+    //         <EventCard />
+    //         <EventCard />
+    //         <EventCard />
+    //       </div>
+    //     </div>
+    //   </section>
+
+    //   {/* Gradient Banner */}
+    //   <section className="mt-8">
+    //     <h3 className=" text-xl font-semibold mb-3">For You</h3>
+    //     <GradientBanner />
+    //   </section>
+
+    //   {/* Categories */}
+    //   <section className="mt-8">
+    //     <div className="flex justify-between items-center mb-3">
+    //       <h3 className="text-xl font-semibold">Categories</h3>
+    //       <a className="text-xs text-accentBlue" href="/categories">
+    //         View all
+    //       </a>
+    //     </div>
+
+    //     <div className="grid grid-cols-3 gap-3">
+    //       <CategoryCard label="Concerts" count={31} />
+    //       <CategoryCard label="Movies" count={21} />
+    //       <CategoryCard label="Tech" count={24} />
+    //     </div>
+    //   </section>
+
+    //   {/* Bottom Navigation */}
+    //   <BottomNav />
+    // </div>
   );
 }

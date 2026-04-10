@@ -12,40 +12,15 @@ import {
   LogIn,
   UserPlus,
 } from "lucide-react";
-
-/* ✅ TYPE */
-type UserType = {
-  name: string;
-  email: string;
-  gender?: "male" | "female" | "";
-};
+import { useUser } from "@/context/UserContext"; // ✅ NEW
 
 export default function ProfileMenu() {
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
+  const { user } = useUser(); // ✅ USE GLOBAL USER
   const router = useRouter();
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const [user, setUser] = useState<UserType | null>(null);
-
-  /* ✅ FETCH USER */
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (!session) return;
-
-      try {
-        const res = await fetch("/api/user/me");
-        const data: UserType = await res.json();
-        setUser(data);
-      } catch {
-        console.log("Failed to load user");
-      }
-    };
-
-    fetchUser();
-  }, [session]);
-
-  /* ✅ NAME + INITIALS */
   const name = user?.name || session?.user?.name || "";
 
   const initials = name
@@ -56,7 +31,6 @@ export default function ProfileMenu() {
         .toUpperCase()
     : "P";
 
-  /* ✅ NAVIGATION */
   const navigate = (path: string) => {
     setOpen(false);
     router.push(path);
@@ -67,7 +41,7 @@ export default function ProfileMenu() {
     signOut();
   };
 
-  /* ✅ CLICK OUTSIDE */
+  // ✅ CLICK OUTSIDE
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -84,7 +58,6 @@ export default function ProfileMenu() {
     };
   }, [open]);
 
-  /* ✅ AVATAR */
   const avatar =
     user?.gender === "male"
       ? "from-blue-500 to-cyan-400"
@@ -188,7 +161,7 @@ export default function ProfileMenu() {
   );
 }
 
-/* ✅ MENU ITEM */
+/* MENU ITEM */
 function MenuItem({
   icon,
   label,
@@ -213,7 +186,7 @@ function MenuItem({
   );
 }
 
-/* ✅ DIVIDER */
+/* DIVIDER */
 function Divider() {
   return <div className="h-px bg-white/10 my-2 opacity-50" />;
 }
