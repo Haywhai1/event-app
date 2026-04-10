@@ -36,7 +36,7 @@ export default function EventCard() {
       <div className="absolute inset-0 bg-black/40" />
 
       {/* GRADIENT FADE */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-black/0 to-transparent" />
 
       {/* DATE BADGE (UPGRADED) */}
       <div
