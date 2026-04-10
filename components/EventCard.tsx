@@ -29,14 +29,14 @@ export default function EventCard() {
         height={200}
         loading="eager"
         className="absolute inset-0 w-full h-full object-cover 
-        group-hover:scale-110 transition-transform duration-500 border-4 border-white/100 rounded-2xl"
+        group-hover:scale-110 transition-transform duration-500 border-4 border-white/100 rounded-2xl brightness-110 contrast-110 saturate-110"
       />
 
       {/* DARK OVERLAY */}
       <div className="absolute inset-0 bg-black/40" />
 
       {/* GRADIENT FADE */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/1 via-black/0 to-transparent" />
+      <div className="absolute inset-30 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
       {/* DATE BADGE (UPGRADED) */}
       <div
