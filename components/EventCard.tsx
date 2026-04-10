@@ -23,7 +23,7 @@ export default function EventCard() {
     >
       {/* IMAGE */}
       <Image
-        src="/images/irish.png"
+        src="/images/irish2.png"
         alt="Event"
         width={200}
         height={200}
