@@ -1,6 +1,6 @@
 import React from "react";
 import SearchBar from "@/components/SearchBar";
-import EventCard from "@/components/EventCard";
+import EventCard from "@/components/EventCard2";
 import GradientBanner from "@/components/GradientBanner";
 import CategoryCard from "@/components/CategoryCard";
 import BottomNav from "@/components/BottomNav";

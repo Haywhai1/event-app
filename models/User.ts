@@ -8,10 +8,17 @@ const UserSchema = new Schema(
 
     password: { type: String, required: true },
 
+    // ✅ ROLE SYSTEM (VERY IMPORTANT)
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+
     gender: {
       type: String,
       enum: ["male", "female"],
-      default: null, // 🔥 important
+      default: null,
     },
 
     bio: {
@@ -20,6 +27,12 @@ const UserSchema = new Schema(
     },
 
     location: {
+      type: String,
+      default: "",
+    },
+
+    // ✅ OPTIONAL (future-ready)
+    avatar: {
       type: String,
       default: "",
     },

@@ -1,71 +1,49 @@
-import Image from "next/image";
+"use client";
 
-export default function EventCard() {
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { EventType } from "@/types/event";
+
+interface Props {
+  event: EventType;
+}
+
+export default function EventCard({ event }: Props) {
+  const router = useRouter();
+
+  const date = new Date(event.date);
+  const month = date.toLocaleString("default", { month: "short" });
+  const day = date.getDate();
+
   return (
     <div
-      className="
-      relative shrink-0 rounded-2xl overflow-hidden
-
-      w-64 h-64
-      md:w-72 md:h-64
-      lg:w-96 lg:h-80
-
-      bg-white/5 backdrop-blur-xl
-      border border-white/10
-
-      shadow-[0_10px_40px_rgba(0,0,0,0.5)]
-      hover:shadow-[0_20px_60px_rgba(0,0,0,0.7)]
-      hover:scale-[1.02]
-
-      transition-all duration-300
-      group
-    "
+      onClick={() => router.push(`/events/${event._id}`)}
+      className="relative rounded-2xl overflow-hidden cursor-pointer w-full h-56 md:h-64 lg:h-80 bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.7)] hover:scale-[1.02] transition-all duration-300 group"
     >
-      {/* IMAGE */}
       <Image
-        src="/images/irish2.png"
-        alt="Event"
-        width={200}
-        height={200}
+        src={event.coverImage || "/fallback.jpg"}
+        alt={event.title}
+        fill
         loading="eager"
-        className="absolute inset-0 w-full h-full object-cover 
-        group-hover:scale-110 transition-transform duration-500 border-4 border-white/100 rounded-2xl brightness-110 contrast-110 saturate-110"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        className="object-cover group-hover:scale-110 transition-transform duration-500 border-4 border-white/100 rounded-2xl"
       />
 
-      {/* DARK OVERLAY */}
       <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
-      {/* GRADIENT FADE */}
-      <div className="absolute inset-30 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-
-      {/* DATE BADGE (UPGRADED) */}
-      <div
-        className="
-        absolute top-3 right-3 z-10
-        px-3 py-1.5 rounded-xl
-
-        bg-white/90 backdrop-blur-md
-        text-black text-xs font-semibold
-
-        flex flex-col items-center leading-tight
-        shadow-md
-      "
-      >
-        <span className="text-[10px] uppercase tracking-wide text-gray-600 ">
-          Oct
-        </span>
-        <span className="text-sm font-bold">21</span>
+      <div className="absolute top-3 right-3 z-10 px-3 py-1.5 rounded-xl bg-white/90 text-black text-xs font-semibold flex flex-col items-center shadow-md">
+        <span className="text-[10px] uppercase text-gray-600">{month}</span>
+        <span className="text-sm font-bold">{day}</span>
       </div>
 
-      {/* CONTENT */}
       <div className="absolute bottom-4 left-4 z-10">
-        <p className="text-xs text-gray-300">Concert</p>
-        <h3 className="text-lg font-semibold text-white leading-tight">
-          Blue Irish
+        <p className="text-xs text-gray-300">{event.category}</p>
+        <h3 className="text-lg font-semibold text-white">
+          {event.title}
         </h3>
       </div>
 
-      {/* GLOW RING */}
       <div className="absolute inset-0 rounded-2xl ring-1 ring-white/10 pointer-events-none" />
     </div>
   );

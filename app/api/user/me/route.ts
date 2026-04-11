@@ -13,7 +13,7 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const user = await User.findOne({ email: session.user.email }).select("-password");
+  const user = await User.findOne({ email: session.user.email }).select("-password").lean();
 
   return NextResponse.json(user);
 }
