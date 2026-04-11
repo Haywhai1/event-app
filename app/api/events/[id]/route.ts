@@ -4,6 +4,9 @@ import { authOptions } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import Event from "@/models/Event";
 
+/* =========================
+   GET EVENT
+========================= */
 export async function GET(
   req: Request,
   context: { params: Promise<{ id: string }> }
@@ -11,7 +14,7 @@ export async function GET(
   try {
     await connectDB();
 
-    const { id } = await context.params; // ✅ REQUIRED in your setup
+    const { id } = await context.params;
 
     if (!id) {
       return NextResponse.json(
@@ -40,71 +43,103 @@ export async function GET(
   }
 }
 
+/* =========================
+   PATCH EVENT
+========================= */
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } },
+  context: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
 
-  if (!session)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
 
-  if (session.user.role !== "admin")
+  if (session.user.role !== "admin") {
     return NextResponse.json(
       { error: "Forbidden – Admin only" },
-      { status: 403 },
+      { status: 403 }
     );
+  }
 
   try {
     await connectDB();
+
+    const { id } = await context.params;
     const data = await req.json();
 
-    const updated = await Event.findByIdAndUpdate(params.id, data, {
+    const updated = await Event.findByIdAndUpdate(id, data, {
       new: true,
     });
 
-    if (!updated)
-      return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    if (!updated) {
+      return NextResponse.json(
+        { error: "Event not found" },
+        { status: 404 }
+      );
+    }
 
     return NextResponse.json(updated);
   } catch (error) {
     console.error("Update event error:", error);
+
     return NextResponse.json(
       { error: "Failed to update event" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
 
+/* =========================
+   DELETE EVENT
+========================= */
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } },
+  context: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
 
-  if (!session)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
 
-  if (session.user.role !== "admin")
+  if (session.user.role !== "admin") {
     return NextResponse.json(
       { error: "Forbidden – Admin only" },
-      { status: 403 },
+      { status: 403 }
     );
+  }
 
   try {
     await connectDB();
 
-    const deleted = await Event.findByIdAndDelete(params.id);
+    const { id } = await context.params;
 
-    if (!deleted)
-      return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    const deleted = await Event.findByIdAndDelete(id);
 
-    return NextResponse.json({ message: "Event deleted" });
+    if (!deleted) {
+      return NextResponse.json(
+        { error: "Event not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      message: "Event deleted",
+    });
   } catch (error) {
     console.error("Delete event error:", error);
+
     return NextResponse.json(
       { error: "Failed to delete event" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
