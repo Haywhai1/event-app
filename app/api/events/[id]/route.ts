@@ -6,23 +6,38 @@ import Event from "@/models/Event";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  await connectDB();
+  try {
+    await connectDB();
 
-  const { id } = await params; // 
+    const { id } = await context.params; // ✅ REQUIRED in your setup
 
-  if (!id) {
-    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+    if (!id) {
+      return NextResponse.json(
+        { error: "Invalid ID" },
+        { status: 400 }
+      );
+    }
+
+    const event = await Event.findById(id);
+
+    if (!event) {
+      return NextResponse.json(
+        { error: "Event not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(event);
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      { error: "Server error" },
+      { status: 500 }
+    );
   }
-
-  const event = await Event.findById(id);
-
-  if (!event) {
-    return NextResponse.json({ error: "Event not found" }, { status: 404 });
-  }
-
-  return NextResponse.json(event);
 }
 
 export async function PATCH(
