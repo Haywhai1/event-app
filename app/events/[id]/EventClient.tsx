@@ -25,7 +25,7 @@ export default function EventClient({ event }: { event: EventType }) {
     <div className="min-h-screen bg-black text-white pb-28">
       
       {/* IMAGE */}
-      <div className="relative w-full h-[320px]">
+      <div className="relative w-full h-[280px]">
         <Image
           src={event.coverImage || "/fallback.jpg"}
           alt={event.title}
@@ -46,7 +46,7 @@ export default function EventClient({ event }: { event: EventType }) {
 
       {/* TABS */}
       <div className="px-4 mt-6">
-        <div className="flex gap-2 bg-white/5 p-1 rounded-xl border border-white/10">
+        <div className="flex gap-2 bg-white/5 p-1 rounded-xl ">
           
           <Tab active={tab === "about"} onClick={() => setTab("about")}>
             About
@@ -63,7 +63,7 @@ export default function EventClient({ event }: { event: EventType }) {
       </div>
 
       {/* CONTENT */}
-      <div className="px-4 mt-6">
+      <div className="px-4 mt-6 ">
         {tab === "about" && (
           <Content>{event.about}</Content>
         )}
@@ -78,12 +78,16 @@ export default function EventClient({ event }: { event: EventType }) {
       </div>
 
       {/* CTA */}
-      <div className="fixed bottom-4 left-4 right-4">
+      <div className="fixed bottom-4 left-4 right-4 mt-4">
         <button className="w-full h-14 rounded-xl font-semibold text-white
-        bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400
-        shadow-[0_6px_20px_rgba(255,0,150,0.4)]
-        active:scale-95 transition">
+        bg-gradientPrimary shadow-lg">
           Buy Tickets for ${event.price}
+        </button>
+
+        <button className="w-full h-14 rounded-xl font-semibold text-white
+        bg-gray-500 my-2
+        ">
+          Save for later
         </button>
       </div>
     </div>
@@ -117,7 +121,7 @@ function Tab({
 /* CONTENT CARD */
 function Content({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-white text-black rounded-2xl p-5 text-sm leading-relaxed">
+    <div className=" text-white rounded-2xl py-1 text-sm leading-relaxed">
       {children}
     </div>
   );

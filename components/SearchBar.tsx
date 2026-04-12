@@ -34,12 +34,10 @@ export default function SearchBar() {
         className="
         h-12 w-12 rounded-2xl flex items-center justify-center
         
-        bg-white/5 backdrop-blur-xl
+        bg-gradientPrimary backdrop-blur-xl
         border border-white/10
         
-        shadow-[0_4px_20px_rgba(0,0,0,0.3)]
-        
-        hover:bg-white/10 transition
+        shadow-lg
       "
       >
         <SlidersHorizontal size={18} className="text-white" />
