@@ -1,18 +1,33 @@
-"use client";
+// "use client";
 
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import SearchBar from "@/components/SearchBar";
 import EventCard from "@/components/EventCard2";
 import GradientBanner from "@/components/GradientBanner";
 import CategoryCard from "@/components/CategoryCard";
 import BottomNav from "@/components/BottomNav";
 import ProfileMenu from "@/components/ProfileMenu";
-import Link from "next/link";
+import Event from "@/models/Event";
+import { connectDB } from "@/lib/db";
+import { EventType } from "@/types/event";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import ViewAllButton from "@/components/ViewAllButton";
 
-export default function ExplorePage() {
-  const { data: session, status } = useSession();
+async function getPopularEvents(): Promise<EventType[]> {
+  await connectDB();
 
+  const events = await Event.find().sort({ createdAt: -1 }).limit(3).lean();
+
+  return JSON.parse(JSON.stringify(events));
+}
+
+export default async function ExplorePage() {
+  const popularEvents = await getPopularEvents();
+  // const { data: session, status } = useSession();
+  const session = await getServerSession(authOptions);
   const name = session?.user?.name;
+
   return (
     <div
       className="relative min-h-screen pb-20 px-4 
@@ -30,11 +45,7 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
         <header className="mt-6 mb-4">
           <div className="flex justify-between items-center">
             <h2 className="text-white text-sm">
-              {status === "loading"
-                ? "Loading..."
-                : session
-                  ? `Hello ${name}`
-                  : "Hello Guest"}
+              {session ? `Hello ${name}` : "Hello Guest"}
             </h2>
 
             <ProfileMenu />
@@ -53,25 +64,21 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-xl font-semibold mb-3">Popular Events 🔥</h3>
 
-            <Link href="/events" className="text-base text-accentBlue">
-              View all
-            </Link>
+            <ViewAllButton href="/events" />
           </div>
 
-          <div>
-            {/* Mobile Scroll */}
-            <div className="flex gap-4 overflow-x-auto lg:hidden">
-              <EventCard />
-              <EventCard />
-              <EventCard />
-            </div>
+          {/* Mobile Scroll */}
+          <div className="flex gap-4 overflow-x-auto lg:hidden">
+            {popularEvents.map((event: EventType) => (
+              <EventCard key={event._id} event={event} />
+            ))}
+          </div>
 
-            {/* Desktop Grid */}
-            <div className="hidden lg:grid grid-cols-3 gap-6">
-              <EventCard />
-              <EventCard />
-              <EventCard />
-            </div>
+          {/* Desktop Grid */}
+          <div className="hidden lg:grid grid-cols-3 gap-6">
+            {popularEvents.map((event: EventType) => (
+              <EventCard key={event._id} event={event} />
+            ))}
           </div>
         </section>
 
@@ -85,9 +92,7 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
         <section className="mt-8">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-xl font-semibold">Categories</h3>
-            <a className="text-xs text-accentBlue" href="/categories">
-              View all
-            </a>
+            <ViewAllButton href="/categories" />
           </div>
 
           <div className="grid grid-cols-3 gap-3">

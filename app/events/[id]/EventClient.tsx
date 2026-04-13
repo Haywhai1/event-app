@@ -1,5 +1,6 @@
 "use client";
 
+import BackButton from "@/components/BackButton";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -26,6 +27,7 @@ export default function EventClient({ event }: { event: EventType }) {
       
       {/* IMAGE */}
       <div className="relative w-full h-[45vh]">
+        <BackButton href="/events" />
         <Image
           src={event.coverImage || "/fallback.jpg"}
           alt={event.title}

@@ -2,9 +2,13 @@
 
 import { SlidersHorizontal } from "lucide-react";
 
-export default function SearchBar() {
+type Props = {
+  className?: string;
+};
+
+export default function SearchBar({ className }: Props) {
   return (
-    <div className="flex items-center gap-3 mt-4">
+    <div className={`flex items-center gap-3 mt-4 ${className || ''}`}>
       
       {/* SEARCH INPUT */}
       <div
@@ -23,7 +27,7 @@ export default function SearchBar() {
           type="text"
           placeholder="Search events..."
           className="
-          bg-transparent outline-none text-sm w-full
+          bg-transparent outline-none text-[17px] w-full
           placeholder:text-gray-400 text-white
         "
         />

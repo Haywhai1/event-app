@@ -1,10 +1,36 @@
-import Image from "next/image";
+"use client";
 
-export default function EventCard() {
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { EventType } from "@/types/event";
+import Loader from "./Loader";
+
+interface Props {
+  event: EventType;
+}
+
+export default function PopularEventCard({ event }: Props) {
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false); // click loader
+  const [imgLoading, setImgLoading] = useState(true); // skeleton
+
+  const handleClick = () => {
+    if (loading) return; // ✅ prevent multiple clicks
+    setLoading(true);
+    router.push(`/events/${event._id}`);
+  };
+
+  const date = new Date(event.date);
+  const month = date.toLocaleString("default", { month: "short" });
+  const day = date.getDate();
+
   return (
     <div
+      onClick={handleClick}
       className="
-      relative shrink-0 rounded-2xl overflow-hidden
+      relative shrink-0 rounded-2xl overflow-hidden cursor-pointer
 
       w-64 h-64
       md:w-72 md:h-64
@@ -21,51 +47,57 @@ export default function EventCard() {
       group
     "
     >
+      {/* ✅ SKELETON */}
+      {imgLoading && (
+        <div className="absolute inset-0 animate-pulse bg-white/10 z-[1]" />
+      )}
+
       {/* IMAGE */}
       <Image
-        src="/images/irish2.png"
-        alt="Event"
-        width={200}
-        height={200}
+        src={event.coverImage || "/fallback.jpg"}
+        alt={event.title}
+        fill
         loading="eager"
-        className="absolute inset-0 w-full h-full object-cover 
-        group-hover:scale-110 transition-transform duration-500 border-4 border-white/100 rounded-2xl brightness-110 contrast-110 saturate-110"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        onLoad={() => setImgLoading(false)}
+        className={`
+          object-cover 
+          transition-all duration-500 
+          border-4 border-white/100 rounded-2xl brightness-110 contrast-110 saturate-110
+          ${imgLoading ? "scale-105 blur-sm" : "group-hover:scale-110"}
+        `}
       />
 
       {/* DARK OVERLAY */}
       <div className="absolute inset-0 bg-black/40" />
 
-      {/* GRADIENT FADE */}
-      <div className="absolute inset-30 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+      {/* GRADIENT */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
-      {/* DATE BADGE (UPGRADED) */}
-      <div
-        className="
-        absolute top-3 right-3 z-10
-        px-3 py-1.5 rounded-xl
-
-        bg-white/90 backdrop-blur-md
-        text-black text-xs font-semibold
-
-        flex flex-col items-center leading-tight
-        shadow-md
-      "
-      >
-        <span className="text-[10px] uppercase tracking-wide text-gray-600 ">
-          Oct
+      {/* DATE */}
+      <div className="absolute top-3 right-3 z-10 px-3 py-1.5 rounded-xl bg-white/90 backdrop-blur-md text-black text-xs font-semibold flex flex-col items-center shadow-md">
+        <span className="text-[10px] uppercase text-gray-600">
+          {month}
         </span>
-        <span className="text-sm font-bold">21</span>
+        <span className="text-sm font-bold">{day}</span>
       </div>
 
       {/* CONTENT */}
       <div className="absolute bottom-4 left-4 z-10">
-        <p className="text-xs text-gray-300">Concert</p>
+        <p className="text-xs text-gray-300">{event.category}</p>
         <h3 className="text-lg font-semibold text-white leading-tight">
-          Blue Irish
+          {event.title}
         </h3>
       </div>
 
-      {/* GLOW RING */}
+      {/* ✅ CLICK LOADER */}
+      {loading && (
+        <div className="absolute inset-0 z-20 bg-black/70 backdrop-blur-sm flex items-center justify-center">
+          <Loader />
+        </div>
+      )}
+
+      {/* RING */}
       <div className="absolute inset-0 rounded-2xl ring-1 ring-white/10 pointer-events-none" />
     </div>
   );
