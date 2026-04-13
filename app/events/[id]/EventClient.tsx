@@ -25,7 +25,7 @@ export default function EventClient({ event }: { event: EventType }) {
     <div className="min-h-screen bg-black text-white pb-28">
       
       {/* IMAGE */}
-      <div className="relative w-full h-[280px]">
+      <div className="relative w-full h-[45vh]">
         <Image
           src={event.coverImage || "/fallback.jpg"}
           alt={event.title}
