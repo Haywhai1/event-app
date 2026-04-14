@@ -3,13 +3,15 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import Event from "@/models/Event";
+import cloudinary from "@/lib/cloudinary";
+import { UploadApiResponse } from "cloudinary";
 
 /* =========================
    GET EVENT
 ========================= */
 export async function GET(
   req: Request,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
     await connectDB();
@@ -17,29 +19,20 @@ export async function GET(
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: "Invalid ID" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
     }
 
     const event = await Event.findById(id);
 
     if (!event) {
-      return NextResponse.json(
-        { error: "Event not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
     return NextResponse.json(event);
   } catch (error) {
     console.error(error);
 
-    return NextResponse.json(
-      { error: "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
 
@@ -48,49 +41,66 @@ export async function GET(
 ========================= */
 export async function PATCH(
   req: Request,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> },
 ) {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
-    );
-  }
-
-  if (session.user.role !== "admin") {
-    return NextResponse.json(
-      { error: "Forbidden – Admin only" },
-      { status: 403 }
-    );
+  if (!session || session.user.role !== "admin") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
     await connectDB();
 
     const { id } = await context.params;
-    const data = await req.json();
+    const formData = await req.formData();
 
-    const updated = await Event.findByIdAndUpdate(id, data, {
-      new: true,
-    });
+    const event = await Event.findById(id);
 
-    if (!updated) {
-      return NextResponse.json(
-        { error: "Event not found" },
-        { status: 404 }
-      );
+    if (!event) {
+      return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
+
+    let imageUrl = event.coverImage;
+
+    const file = formData.get("coverImage") as File | null;
+
+    // 🔥 IF NEW IMAGE
+    if (file && file.size > 0) {
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      const upload = await new Promise<UploadApiResponse>((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream({ folder: "events" }, (error, result) => {
+            if (error) reject(error);
+            else resolve(result as UploadApiResponse);
+          })
+          .end(buffer);
+      });
+
+      imageUrl = upload.secure_url;
+    }
+
+    const updated = await Event.findByIdAndUpdate(
+      id,
+      {
+        title: formData.get("title"),
+        location: formData.get("location"),
+        about: formData.get("about"),
+        date: formData.get("date"),
+        time: formData.get("time"),
+        price: Number(formData.get("price")),
+        category: formData.get("category"),
+        coverImage: imageUrl,
+      },
+      { new: true },
+    );
 
     return NextResponse.json(updated);
   } catch (error) {
-    console.error("Update event error:", error);
-
-    return NextResponse.json(
-      { error: "Failed to update event" },
-      { status: 500 }
-    );
+    console.error(error);
+    return NextResponse.json({ error: "Update failed" }, { status: 500 });
   }
 }
 
@@ -99,22 +109,12 @@ export async function PATCH(
 ========================= */
 export async function DELETE(
   req: Request,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> },
 ) {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
-    );
-  }
-
-  if (session.user.role !== "admin") {
-    return NextResponse.json(
-      { error: "Forbidden – Admin only" },
-      { status: 403 }
-    );
+  if (!session || session.user.role !== "admin") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
@@ -122,24 +122,26 @@ export async function DELETE(
 
     const { id } = await context.params;
 
-    const deleted = await Event.findByIdAndDelete(id);
+    const event = await Event.findById(id);
 
-    if (!deleted) {
-      return NextResponse.json(
-        { error: "Event not found" },
-        { status: 404 }
-      );
+    if (!event) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    return NextResponse.json({
-      message: "Event deleted",
-    });
-  } catch (error) {
-    console.error("Delete event error:", error);
+    // 🔥 OPTIONAL: delete image
+    if (event.coverImage) {
+      const publicId = event.coverImage.split("/").pop()?.split(".")[0];
 
-    return NextResponse.json(
-      { error: "Failed to delete event" },
-      { status: 500 }
-    );
+      if (publicId) {
+        await cloudinary.uploader.destroy(`events/${publicId}`);
+      }
+    }
+
+    await Event.findByIdAndDelete(id);
+
+    return NextResponse.json({ message: "Deleted" });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "Delete failed" }, { status: 500 });
   }
 }

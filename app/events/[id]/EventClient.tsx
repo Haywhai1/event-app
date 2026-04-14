@@ -3,9 +3,12 @@
 import BackButton from "@/components/BackButton";
 import Image from "next/image";
 import { useState } from "react";
+import AdminEventActions from "@/components/AdminEventActions";
+import { useSession } from "next-auth/react";
 
 /* ✅ TYPE (fixes "any" error) */
 type EventType = {
+  _id: string;
   title: string;
   date: string;
   time: string;
@@ -16,26 +19,33 @@ type EventType = {
 };
 
 export default function EventClient({ event }: { event: EventType }) {
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.role === "admin";
   const [tab, setTab] = useState<"about" | "location" | "participants">(
-    "about"
+    "about",
   );
 
   const date = new Date(event.date);
 
   return (
     <div className="min-h-screen bg-black text-white pb-28">
-      
       {/* IMAGE */}
       <div className="relative w-full h-[45vh]">
         <BackButton href="/events" />
+
+        {/* ✅ ADMIN BUTTONS */}
+        {isAdmin && <AdminEventActions eventId={event._id} />}
+
         <Image
           src={event.coverImage || "/fallback.jpg"}
           alt={event.title}
           fill
-          loading="eager"
+          unoptimized
+          priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
       </div>
 
       {/* TITLE */}
@@ -49,7 +59,6 @@ export default function EventClient({ event }: { event: EventType }) {
       {/* TABS */}
       <div className="px-4 mt-6">
         <div className="flex gap-2 bg-white/5 p-1 rounded-xl ">
-          
           <Tab active={tab === "about"} onClick={() => setTab("about")}>
             About
           </Tab>
@@ -58,7 +67,10 @@ export default function EventClient({ event }: { event: EventType }) {
             Location
           </Tab>
 
-          <Tab active={tab === "participants"} onClick={() => setTab("participants")}>
+          <Tab
+            active={tab === "participants"}
+            onClick={() => setTab("participants")}
+          >
             Participants
           </Tab>
         </div>
@@ -66,29 +78,27 @@ export default function EventClient({ event }: { event: EventType }) {
 
       {/* CONTENT */}
       <div className="px-4 mt-6 ">
-        {tab === "about" && (
-          <Content>{event.about}</Content>
-        )}
+        {tab === "about" && <Content>{event.about}</Content>}
 
-        {tab === "location" && (
-          <Content>{event.location}</Content>
-        )}
+        {tab === "location" && <Content>{event.location}</Content>}
 
-        {tab === "participants" && (
-          <Content>No participants yet</Content>
-        )}
+        {tab === "participants" && <Content>No participants yet</Content>}
       </div>
 
       {/* CTA */}
       <div className="fixed bottom-4 left-4 right-4 mt-4">
-        <button className="w-full h-14 rounded-xl font-semibold text-white
-        bg-gradientPrimary shadow-lg">
+        <button
+          className="w-full h-14 rounded-xl font-semibold text-white
+        bg-gradientPrimary shadow-lg"
+        >
           Buy Tickets for ${event.price}
         </button>
 
-        <button className="w-full h-14 rounded-xl font-semibold text-white
+        <button
+          className="w-full h-14 rounded-xl font-semibold text-white
         bg-gray-500 my-2
-        ">
+        "
+        >
           Save for later
         </button>
       </div>
@@ -110,9 +120,7 @@ function Tab({
     <button
       onClick={onClick}
       className={`flex-1 py-2 rounded-lg text-sm transition ${
-        active
-          ? "bg-white text-black font-medium"
-          : "text-gray-300"
+        active ? "bg-white text-black font-medium" : "text-gray-300"
       }`}
     >
       {children}

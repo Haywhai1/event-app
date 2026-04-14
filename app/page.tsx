@@ -1,8 +1,5 @@
-// "use client";
-
-// import { useSession } from "next-auth/react";
 import SearchBar from "@/components/SearchBar";
-import EventCard from "@/components/EventCard2";
+import EventCard from "@/components/popularEventCard";
 import GradientBanner from "@/components/GradientBanner";
 import CategoryCard from "@/components/CategoryCard";
 import BottomNav from "@/components/BottomNav";
@@ -24,7 +21,6 @@ async function getPopularEvents(): Promise<EventType[]> {
 
 export default async function ExplorePage() {
   const popularEvents = await getPopularEvents();
-  // const { data: session, status } = useSession();
   const session = await getServerSession(authOptions);
   const name = session?.user?.name;
 
@@ -42,9 +38,9 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
       {/* Content */}
       <div className="relative z-10">
         {/* Header */}
-        <header className="mt-6 mb-4">
+        <header className="pt-6 mb-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-white text-sm">
+            <h2 className="text-white text-base">
               {session ? `Hello ${name}` : "Hello Guest"}
             </h2>
 

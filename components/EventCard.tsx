@@ -41,7 +41,9 @@ export default function EventCard({ event }: Props) {
         src={event.coverImage || "/fallback.jpg"}
         alt={event.title}
         fill
-        loading="eager"
+        unoptimized
+        priority   
+        // loading="eager"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         onLoad={() => setImgLoading(false)} // ✅ remove skeleton
         className={`object-cover transition-all duration-500 border-4 border-white/100 rounded-2xl ${
@@ -51,7 +53,7 @@ export default function EventCard({ event }: Props) {
 
       {/* DARK OVERLAY */}
       <div className="absolute inset-0 bg-black/40" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-black/10 to-transparent" />
 
       {/* DATE BADGE */}
       <div className="absolute top-3 right-3 z-10 px-3 py-1.5 rounded-xl bg-white/90 text-black text-xs font-semibold flex flex-col items-center shadow-md">

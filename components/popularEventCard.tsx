@@ -57,7 +57,9 @@ export default function PopularEventCard({ event }: Props) {
         src={event.coverImage || "/fallback.jpg"}
         alt={event.title}
         fill
-        loading="eager"
+        priority
+        unoptimized   
+        // loading="eager"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         onLoad={() => setImgLoading(false)}
         className={`
@@ -69,7 +71,7 @@ export default function PopularEventCard({ event }: Props) {
       />
 
       {/* DARK OVERLAY */}
-      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 bg-black/10" />
 
       {/* GRADIENT */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
