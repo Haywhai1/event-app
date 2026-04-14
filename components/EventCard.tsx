@@ -52,7 +52,7 @@ export default function EventCard({ event }: Props) {
       />
 
       {/* DARK OVERLAY */}
-      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 bg-black/10" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-black/10 to-transparent" />
 
       {/* DATE BADGE */}
