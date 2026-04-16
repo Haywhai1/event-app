@@ -2,7 +2,7 @@ import SearchBar from "@/components/SearchBar";
 import EventCard from "@/components/popularEventCard";
 import GradientBanner from "@/components/GradientBanner";
 import CategoryCard from "@/components/CategoryCard";
-import BottomNav from "@/components/BottomNav";
+// import BottomNav from "@/components/BottomNav";
 import ProfileMenu from "@/components/ProfileMenu";
 import Event from "@/models/Event";
 import { connectDB } from "@/lib/db";
@@ -104,7 +104,7 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black overscroll-y-none"
         </section>
 
         {/* Bottom Navigation */}
-        <BottomNav />
+        {/* <BottomNav /> */}
       </div>
     </div>
   );
