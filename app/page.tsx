@@ -1,6 +1,6 @@
 import SearchBar from "@/components/SearchBar";
 import EventCard from "@/components/popularEventCard";
-// import GradientBanner from "@/components/GradientBanner";
+import GradientBanner from "@/components/GradientBanner";
 import CategoryCard from "@/components/CategoryCard";
 import BottomNav from "@/components/BottomNav";
 import ProfileMenu from "@/components/ProfileMenu";
@@ -84,13 +84,13 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black overscroll-y-none"
         </section>
 
         {/* Gradient Banner */}
-        {/* <section className="mt-8">
+        <section className="mt-8">
           <h3 className=" text-xl md:text-2xl font-semibold mb-3">For You</h3>
           <GradientBanner />
-        </section> */}
+        </section>
 
         {/* Categories */}
-        <section className="mt-8">
+        {/* <section className="mt-8">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-xl md:text-2xl font-semibold">Categories</h3>
             <ViewAllButton href="/categories" />
@@ -101,7 +101,7 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black overscroll-y-none"
             <CategoryCard label="Movies" count={21} />
             <CategoryCard label="Tech" count={24} />
           </div>
-        </section>
+        </section> */}
 
         {/* Bottom Navigation */}
         <BottomNav />
