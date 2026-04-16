@@ -26,8 +26,8 @@ export default async function ExplorePage() {
 
   return (
     <div
-      className="relative min-h-screen pb-20 px-4 md:px-6 
-bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
+      className="relative min-h-screen pb-28 px-4 md:px-6 
+bg-gradient-to-b from-[#0f172a] via-[#020617] to-black overscroll-y-none"
     >
       {/* Glow overlay */}
       <div
@@ -67,9 +67,9 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
 
           {/* Mobile Scroll */}
           <div
-  className="flex gap-4 overflow-x-auto lg:hidden touch-pan-x"
-  style={{ WebkitOverflowScrolling: "touch" }}
->
+            className="flex gap-4 overflow-x-auto lg:hidden touch-pan-x"
+            style={{ WebkitOverflowScrolling: "touch" }}
+          >
             {popularEvents.map((event: EventType) => (
               <EventCard key={event._id} event={event} />
             ))}
