@@ -38,7 +38,7 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black overscroll-y-none"
       {/* Content */}
       <div className="relative z-10">
         {/* Header */}
-        <header className="pt-6 mb-4">
+        <header className="pt-6 pb-4">
           <div className="flex justify-between items-center">
             <h2 className="text-white text-base md:text-lg font-medium">
               {session ? `Hello ${name}` : "Hello Guest"}
@@ -47,7 +47,7 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black overscroll-y-none"
             <ProfileMenu />
           </div>
 
-          <h1 className="text-2xl md:text-3xl font-semibold mt-1">
+          <h1 className="text-2xl md:text-3xl font-semibold ">
             Explore Amazing Events
           </h1>
         </header>
@@ -56,9 +56,9 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black overscroll-y-none"
         <SearchBar />
 
         {/* Popular Events */}
-        <section className="mt-6">
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="text-xl md:text-2xl font-semibold mb-3">
+        <section className="pt-6">
+          <div className="flex justify-between items-center pb-3">
+            <h3 className="text-xl md:text-2xl font-semibold pb-3">
               Popular Events 🔥
             </h3>
 
@@ -84,15 +84,15 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black overscroll-y-none"
         </section>
 
         {/* Gradient Banner */}
-        <section className="mt-8">
-          <h3 className=" text-xl md:text-2xl font-semibold mb-3">For You</h3>
+        <section className="my-8">
+          <h3 className=" text-xl md:text-2xl font-semibold mb-6">For You</h3>
           <GradientBanner />
         </section>
 
         {/* Categories */}
-        {/* <section className="mt-8">
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="text-xl md:text-2xl font-semibold">Categories</h3>
+        <section className="">
+          <div className="flex justify-between items-center pb-3">
+            <h3 className="text-xl md:text-2xl font-semibold pb-3">Categories</h3>
             <ViewAllButton href="/categories" />
           </div>
 
@@ -101,7 +101,7 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black overscroll-y-none"
             <CategoryCard label="Movies" count={21} />
             <CategoryCard label="Tech" count={24} />
           </div>
-        </section> */}
+        </section>
 
         {/* Bottom Navigation */}
         <BottomNav />
