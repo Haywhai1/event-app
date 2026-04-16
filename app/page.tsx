@@ -32,7 +32,7 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
       {/* Glow overlay */}
       <div
         className="absolute top-0 left-0 w-full h-64 
-  bg-gradient-to-r from-purple-500/20 via-blue-500/20 to-transparent blur-3xl pointer-events-none"
+  bg-gradient-to-r from-purple-500/20 via-blue-500/20 to-transparent blur-xl pointer-events-none"
       />
 
       {/* Content */}
@@ -67,9 +67,9 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
 
           {/* Mobile Scroll */}
           <div
-            className="flex gap-4 overflow-x-auto lg:hidden touch-pan-x scroll-smooth"
-            style={{ WebkitOverflowScrolling: "touch" }}
-          >
+  className="flex gap-4 overflow-x-auto lg:hidden touch-pan-x"
+  style={{ WebkitOverflowScrolling: "touch" }}
+>
             {popularEvents.map((event: EventType) => (
               <EventCard key={event._id} event={event} />
             ))}
