@@ -1,6 +1,6 @@
 import SearchBar from "@/components/SearchBar";
 import EventCard from "@/components/popularEventCard";
-import GradientBanner from "@/components/GradientBanner";
+// import GradientBanner from "@/components/GradientBanner";
 import CategoryCard from "@/components/CategoryCard";
 import BottomNav from "@/components/BottomNav";
 import ProfileMenu from "@/components/ProfileMenu";
@@ -84,10 +84,10 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black overscroll-y-none"
         </section>
 
         {/* Gradient Banner */}
-        <section className="mt-8">
+        {/* <section className="mt-8">
           <h3 className=" text-xl md:text-2xl font-semibold mb-3">For You</h3>
           <GradientBanner />
-        </section>
+        </section> */}
 
         {/* Categories */}
         <section className="mt-8">
