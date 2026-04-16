@@ -21,7 +21,7 @@ export default function ViewAllButton({ href }: Props) {
   return (
     <button
       onClick={handleClick}
-      className="flex items-center gap-2 text-base text-accentBlue"
+      className="flex items-center gap-2 text-base md:text-lg text-accentBlue"
     >
       {loading ? (
         <>

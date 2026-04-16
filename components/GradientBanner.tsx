@@ -1,13 +1,13 @@
 export default function GradientBanner() {
   return (
-    <div className="p-4 rounded-2xl text-white bg-gradientPrimary shadow-lg">
-      <h3 className="font-semibold text-base">Claim 3 Free Tickets! 🎉</h3>
+    <div className="p-10 rounded-2xl text-white bg-gradientPrimary shadow-lg md:p-20 md:mx-4 text-center">
+      <h3 className="font-semibold text-lg md:text-3xl">Claim 3 Free Tickets! 🎉</h3>
 
-      <p className="text-xs opacity-90 mt-1 mb-4 leading-relaxed">
+      <p className="text-base md:text-lg opacity-90 mt-1 mb-4 leading-relaxed">
         Open a premium account and get 3 tickets instantly
       </p>
 
-      <button className="px-4 py-2 bg-white text-black rounded-xl text-xs font-semibold">
+      <button className="px-4 py-2 md:px-6 md:py-3 md:text-lg bg-white text-black rounded-xl md:rounded-2xl text-sm font-semibold">
         Click here
       </button>
     </div>

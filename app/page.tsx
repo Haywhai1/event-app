@@ -26,7 +26,7 @@ export default async function ExplorePage() {
 
   return (
     <div
-      className="relative min-h-screen pb-20 px-4 
+      className="relative min-h-screen pb-20 px-6 
 bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
     >
       {/* Glow overlay */}
@@ -40,14 +40,14 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
         {/* Header */}
         <header className="pt-6 mb-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-white text-base">
+            <h2 className="text-white text-base md:text-lg font-medium">
               {session ? `Hello ${name}` : "Hello Guest"}
             </h2>
 
             <ProfileMenu />
           </div>
 
-          <h1 className="text-2xl font-semibold mt-1">
+          <h1 className="text-2xl md:text-3xl font-semibold mt-1">
             Explore Amazing Events
           </h1>
         </header>
@@ -58,20 +58,20 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
         {/* Popular Events */}
         <section className="mt-6">
           <div className="flex justify-between items-center mb-3">
-            <h3 className="text-xl font-semibold mb-3">Popular Events 🔥</h3>
+            <h3 className="text-xl md:text-2xl font-semibold mb-3">Popular Events 🔥</h3>
 
             <ViewAllButton href="/events" />
           </div>
 
           {/* Mobile Scroll */}
-          <div className="flex gap-4 overflow-x-auto lg:hidden">
+          <div className="flex gap-4 overflow-x-auto lg:hidden ">
             {popularEvents.map((event: EventType) => (
               <EventCard key={event._id} event={event} />
             ))}
           </div>
 
           {/* Desktop Grid */}
-          <div className="hidden lg:grid grid-cols-3 gap-6">
+          <div className="hidden lg:grid grid-cols-3 gap-6 md:px-4">
             {popularEvents.map((event: EventType) => (
               <EventCard key={event._id} event={event} />
             ))}
@@ -80,14 +80,14 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
 
         {/* Gradient Banner */}
         <section className="mt-8">
-          <h3 className=" text-xl font-semibold mb-3">For You</h3>
+          <h3 className=" text-xl md:text-2xl font-semibold mb-3">For You</h3>
           <GradientBanner />
         </section>
 
         {/* Categories */}
         <section className="mt-8">
           <div className="flex justify-between items-center mb-3">
-            <h3 className="text-xl font-semibold">Categories</h3>
+            <h3 className="text-xl md:text-2xl font-semibold">Categories</h3>
             <ViewAllButton href="/categories" />
           </div>
 

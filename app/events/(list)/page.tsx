@@ -26,7 +26,7 @@ export default async function EventsPage() {
   const isAdmin = session?.user?.role === "admin";
 
   return (
-    <div className="p-4 md:p-6 bg-gray-900 min-h-screen relative">
+    <div className="p-4 md:p-6  bg-gray-900 min-h-screen relative">
       <BackButton href="/events" />
 
       <div className="mt-12">
@@ -35,7 +35,7 @@ export default async function EventsPage() {
 
       <h1 className="text-2xl font-semibold my-4">All Events</h1>
 
-      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:px-10">
         {events.map((event) => (
           <EventCard key={event._id} event={event} />
         ))}
