@@ -91,7 +91,7 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
             <ViewAllButton href="/categories" />
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-3 pb-10">
             <CategoryCard label="Concerts" count={31} />
             <CategoryCard label="Movies" count={21} />
             <CategoryCard label="Tech" count={24} />
