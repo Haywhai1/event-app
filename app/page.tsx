@@ -26,7 +26,7 @@ export default async function ExplorePage() {
 
   return (
     <div
-      className="relative min-h-screen pb-20 px-6 
+      className="relative min-h-screen pb-20 px-4 md:px-6 
 bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
     >
       {/* Glow overlay */}
@@ -58,13 +58,18 @@ bg-gradient-to-b from-[#0f172a] via-[#020617] to-black"
         {/* Popular Events */}
         <section className="mt-6">
           <div className="flex justify-between items-center mb-3">
-            <h3 className="text-xl md:text-2xl font-semibold mb-3">Popular Events 🔥</h3>
+            <h3 className="text-xl md:text-2xl font-semibold mb-3">
+              Popular Events 🔥
+            </h3>
 
             <ViewAllButton href="/events" />
           </div>
 
           {/* Mobile Scroll */}
-          <div className="flex gap-4 overflow-x-auto lg:hidden ">
+          <div
+            className="flex gap-4 overflow-x-auto lg:hidden touch-pan-x scroll-smooth"
+            style={{ WebkitOverflowScrolling: "touch" }}
+          >
             {popularEvents.map((event: EventType) => (
               <EventCard key={event._id} event={event} />
             ))}
